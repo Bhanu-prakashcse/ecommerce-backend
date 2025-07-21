@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: ecommerce-backend
+    env: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: MYSQL_HOST
+        value: metro.proxy.rlwy.net
+      - key: MYSQL_PORT
+        value: "32407"
+      - key: MYSQL_DATABASE
+        value: railway
+      - key: MYSQL_USERNAME
+        value: root
+      - key: MYSQL_PASSWORD
+        value: <your-actual-password>
