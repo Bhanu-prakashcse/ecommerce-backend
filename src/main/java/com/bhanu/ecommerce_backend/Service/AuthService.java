@@ -23,7 +23,6 @@ public class AuthService {
     public AuthResponse register(AuthRequest request, Role role) {
         User user=User.builder()
                 .username(request.getUsername())
-                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
                 .build();
@@ -35,11 +34,11 @@ public class AuthService {
     public AuthResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        User user=userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("Email not found"));
+        User user=userRepository.findByEmail(request.getUsername()).orElseThrow(() -> new RuntimeException("Email not found"));
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token,user.getRole());
     }
