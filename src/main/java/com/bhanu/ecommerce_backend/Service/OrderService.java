@@ -24,6 +24,9 @@ public class OrderService {
     private final CartItemRepository cartRepo;
     @Autowired
     private OrderItemRepository orderItemRepository;
+    @Autowired
+    private EmailService emailService;
+
 
 
 
@@ -52,6 +55,7 @@ public class OrderService {
         order.setStatus(OrderStatus.PENDING);
 
         orderRepository.save(order);
+        emailService.sendOrderConfirmation(user.getEmail(), order);
         cartRepo.deleteAll(cartItems);
 
         int totalPrice = orderItems.stream()
