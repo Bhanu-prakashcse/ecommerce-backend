@@ -4,8 +4,8 @@ import com.bhanu.ecommerce_backend.Service.AuthService;
 import com.bhanu.ecommerce_backend.config.JwtService;
 import com.bhanu.ecommerce_backend.dto.AuthRequest;
 import com.bhanu.ecommerce_backend.dto.AuthResponse;
+import com.bhanu.ecommerce_backend.dto.RegisterRequest;
 import com.bhanu.ecommerce_backend.model.Role;
-import com.bhanu.ecommerce_backend.model.User;
 import com.bhanu.ecommerce_backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody AuthRequest request, @RequestParam Role role){
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request, @RequestParam Role role){
         AuthResponse response = authService.register(request, role);
         return ResponseEntity.ok(response);
     }

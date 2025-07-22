@@ -3,6 +3,7 @@ package com.bhanu.ecommerce_backend.Service;
 import com.bhanu.ecommerce_backend.config.JwtService;
 import com.bhanu.ecommerce_backend.dto.AuthRequest;
 import com.bhanu.ecommerce_backend.dto.AuthResponse;
+import com.bhanu.ecommerce_backend.dto.RegisterRequest;
 import com.bhanu.ecommerce_backend.model.Role;
 import com.bhanu.ecommerce_backend.model.User;
 import com.bhanu.ecommerce_backend.repository.UserRepository;
@@ -20,7 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponse register(AuthRequest request, Role role) {
+    public AuthResponse register(RegisterRequest request, Role role) {
         User user=User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -39,7 +40,7 @@ public class AuthService {
                         request.getPassword()
                 )
         );
-        User user=userRepository.findByEmail(request.getUsername()).orElseThrow(() -> new RuntimeException("Email not found"));
+        User user=userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new RuntimeException("Email not found"));
         String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token,user.getRole());
     }
