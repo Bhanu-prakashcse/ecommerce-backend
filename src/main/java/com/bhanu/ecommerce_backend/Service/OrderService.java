@@ -24,8 +24,6 @@ public class OrderService {
     private final CartItemRepository cartRepo;
     @Autowired
     private OrderItemRepository orderItemRepository;
-    @Autowired
-    private smsService smsService;
 
 
 
@@ -55,23 +53,13 @@ public class OrderService {
 
         orderRepository.save(order);
         cartRepo.deleteAll(cartItems);
-        String totalAmount=String.valueOf(
-                cartItems.stream().map(cartItem -> cartItem.getProduct().getPrice() * cartItem.getQuantity())
-        );
+
         int totalPrice = orderItems.stream()
                 .mapToInt(item -> item.getPrice() * item.getQuantity())
                 .sum();
-        if(user.getPhoneNumber() != null  && order.getExpectedDelivery() != null){
-            smsService.sendSms(
-                    user.getPhoneNumber(),
-                    "Hello " + user.getUsername() + ", your order total is ₹: " + totalPrice +
-                            " has been placed successfully. \nDelivered expected by " + order.getExpectedDelivery() +
-                            ". Payment: Cash on Delivery"
-            );
-        }else{
-            System.out.println("⚠\uFE0F Phone number or delivery date is null. SMS not sent.");
-        }
-
+        System.out.println("Order Placed for: " + user.getEmail() +
+                " | Total: Rs." + totalPrice +
+                " | Delivery: " + order.getExpectedDelivery());
 
         return "Order Placed Successfully";
     }

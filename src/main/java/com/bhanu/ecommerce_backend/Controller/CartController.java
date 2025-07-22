@@ -2,7 +2,6 @@ package com.bhanu.ecommerce_backend.Controller;
 
 import com.bhanu.ecommerce_backend.Service.CartService;
 import com.bhanu.ecommerce_backend.Service.OrderService;
-import com.bhanu.ecommerce_backend.Service.smsService;
 import com.bhanu.ecommerce_backend.model.CartItems;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/cart")
+@PreAuthorize("hasAuthority('CUSTOMER')")
 @RequiredArgsConstructor
 
 public class CartController {
     private final CartService cartService;
     private final OrderService orderService;
-    private final smsService smsService;
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('CUSTOMER')")
@@ -35,8 +34,9 @@ public class CartController {
 
 
     @PostMapping("/place-order")
-    public ResponseEntity<String> placeOrder(Principal principal){
+    public ResponseEntity<String> placeOrder(Principal principal){ 
         String username=principal.getName();
+        System.out.println("Username placing order:" + principal.getName());
         return ResponseEntity.ok(orderService.PlaceOrder(username));
     }
 
@@ -44,12 +44,6 @@ public class CartController {
     public ResponseEntity<List<CartItems>> getCart(Authentication authentication, Principal principal) {
         String username=principal.getName();
         return ResponseEntity.ok(cartService.getCart(username));
-    }
-
-    @GetMapping("/test-sms")
-    public String testSms() {
-        smsService.sendSms("+91XXXXXXXXXX", "Test message from Twilio");
-        return "Sent!";
     }
 
 

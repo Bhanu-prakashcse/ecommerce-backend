@@ -18,6 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String username;
     @JsonIgnore
@@ -25,7 +26,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String PhoneNumber;
-
+    @Column(nullable = false, unique = true)
+    private String email;
 
 }
